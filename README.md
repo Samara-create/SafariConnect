@@ -1,61 +1,105 @@
-# Standard Schema Utils
+🧭 SafariConnect
+SafariConnect is a full-stack web application that connects travelers across Kenya through intelligent matchmaking, shared trip planning, and real-time chat. It empowers users to find like-minded companions, plan group adventures, and explore Kenya's destinations more affordably and socially.
 
-There are two common tasks that third-party libraries perform after validation fails. The first is to flatten the issues by creating a dot path to more easily associate the issues with the input data. This is commonly used in form libraries. The second is to throw an error that contains all the issue information. To simplify both tasks, Standard Schema also ships a utils package that provides a `getDotPath` function and a `SchemaError` class.
+🚀 Features
+🔐 User & Admin Authentication
 
-```sh
-npm install @standard-schema/utils   # npm
-yarn add @standard-schema/utils      # yarn
-pnpm add @standard-schema/utils      # pnpm
-bun add @standard-schema/utils       # bun
-deno add jsr:@standard-schema/utils  # deno
-```
+Secure login/signup using JWT
 
-## Get Dot Path
+Role-based routing (admin vs. user)
 
-To generate a dot path, simply pass an issue to the `getDotPath` function. If the issue does not contain a path or the path contains a key that is not of type `string` or `number`, the function returns `null`.
+💕 AI-Powered Matchmaking
 
-```ts
-import type { StandardSchemaV1 } from "@standard-schema/spec";
-import { getDotPath } from "@standard-schema/utils";
+Match users based on travel preferences, gender, interests, dates & destinations
 
-async function getFormErrors(schema: StandardSchemaV1, data: unknown) {
-  const result = await schema["~standard"].validate(data);
-  const formErrors: string[] = [];
-  const fieldErrors: Record<string, string[]> = {};
-  if (result.issues) {
-    for (const issue of result.issues) {
-      const dotPath = getDotPath(issue);
-      if (dotPath) {
-        if (fieldErrors[dotPath]) {
-          fieldErrors[dotPath].push(issue.message);
-        } else {
-          fieldErrors[dotPath] = [issue.message];
-        }
-      } else {
-        formErrors.push(issue.message);
-      }
-    }
-  }
-  return { formErrors, fieldErrors };
-}
-```
+💬 Real-time Chat
 
-## Schema Error
+Socket.io-powered messaging between matched travelers
 
-To throw an error that contains all issue information, simply pass the issues of the failed schema validation to the `SchemaError` class. The `SchemaError` class extends the `Error` class with an `issues` property that contains all the issues.
+🌍 Trip Planning
 
-```ts
-import type { StandardSchemaV1 } from "@standard-schema/spec";
-import { SchemaError } from "@standard-schema/utils";
+View and create trip plans with destination, dates, and budget
 
-async function validateInput<TSchema extends StandardSchemaV1>(
-  schema: TSchema,
-  data: unknown,
-): Promise<StandardSchemaV1.InferOutput<TSchema>> {
-  const result = await schema["~standard"].validate(data);
-  if (result.issues) {
-    throw new SchemaError(result.issues);
-  }
-  return result.value;
-}
-```
+📊 Admin Dashboard
+
+View user stats, manage users/trips/matches, export data
+
+🏕️ Tour Package Pages
+
+20+ curated Kenyan destinations (e.g., Diani, Maasai Mara, Nairobi Museum)
+
+📦 Data Export
+
+Export users/matches/trips as JSON or CSV (admin only)
+
+🛠️ Tech Stack
+Frontend	Backend	Database	Realtime	Tools & Libraries
+React.js (Vite)	Node.js + Express.js	MongoDB	Socket.io	JWT, Axios, TailwindCSS, Toastify
+React Router DOM	RESTful API	Mongoose		dotenv, bcryptjs, json2csv
+
+📁 Folder Structure
+bash
+Copy
+Edit
+.
+├── client/                  # React Frontend
+│   ├── pages/               # Login, Explore, Admin, Destinations
+│   ├── components/          # Navbar, Cards, Protected Routes
+│   └── utils/api.js         # Axios API helpers
+├── server/                  # Node.js Backend
+│   ├── models/              # User, Match, Trip, Chat
+│   ├── controllers/         # Auth, Admin, Chat, Match
+│   ├── routes/              # Routes for API endpoints
+│   └── middleware/          # JWT Auth, Role Check
+⚙️ Setup Instructions
+🧩 Prerequisites
+Node.js & npm
+
+MongoDB (local or Atlas)
+
+1️⃣ Clone and Install
+bash
+Copy
+Edit
+git clone https://github.com/yourusername/safariconnect.git
+cd safariconnect
+npm install
+cd client
+npm install
+2️⃣ Configure .env
+Create .env in server/:
+
+env
+Copy
+Edit
+PORT=5000
+MONGO_URI_LOCAL=mongodb://localhost:27017/safariConnect
+JWT_SECRET=your_jwt_secret
+3️⃣ Run the App
+bash
+Copy
+Edit
+# In /server
+npm start
+
+# In /client
+npm run dev
+🔐 Admin Login (Test)
+plaintext
+Copy
+Edit
+Email: admin@example.com
+Password: password123
+Use MongoDB to set role: "admin" if needed.
+
+📷 Screenshots
+Admin Dashboard	Matchmaking
+
+🤝 Contributors
+[Your Name] – Developer
+
+Group Members: Sandra, Chris, Martha, Mark, Zaynoor
+
+📄 License
+MIT © 2025 SafariConnect
+
