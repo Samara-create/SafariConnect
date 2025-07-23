@@ -262,7 +262,7 @@ This project is licensed under the MIT License.
 
 ## 👥 Team
 
-- **Developer**: Kitili
+- **Developer**: Samara
 - **Project**: SafariConnect
 - **Version**: 1.0.0
 
