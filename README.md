@@ -1,278 +1,70 @@
-# SafariConnect - Travel Companion Matching Platform
+# Getting Started with Create React App
 
-A full-stack web application that connects solo travelers with compatible travel companions for shared adventures across Kenya's most beautiful destinations.
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## 🌟 Features
+## Available Scripts
 
-### 🔐 User Authentication & Profiles
-- Secure user registration and login system
-- Detailed user profiles with travel preferences
-- Profile customization with interests and travel style
-- JWT-based authentication
+In the project directory, you can run:
 
-### 💕 Advanced Matchmaking System
-- Sophisticated compatibility algorithm
-- Date overlap matching for travel coordination
-- Destination-based matching
-- Interest and travel style compatibility scoring
-- Real-time match suggestions
+### `npm start`
 
-### 🗺️ Destination Exploration
-- Comprehensive destination database
-- Interactive destination browsing
-- Search and filter functionality
-- Detailed destination information and packages
-- Booking system integration
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-### 💬 Real-time Communication
-- Live chat system between matched users
-- Real-time messaging with Socket.io
-- Message read receipts
-- File and location sharing capabilities
-- Typing indicators
+The page will reload when you make changes.\
+You may also see any lint errors in the console.
 
-### 📊 Admin Dashboard
-- Comprehensive user management
-- Match analytics and monitoring
-- System performance metrics
-- Data export capabilities
-- Content moderation tools
+### `npm test`
 
-### ✈️ Trip Planning
-- Trip creation and management
-- Date coordination tools
-- Destination planning features
-- Travel itinerary management
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-## 🛠️ Technology Stack
+### `npm run build`
 
-### Frontend
-- **React.js** - Modern UI framework
-- **React Router** - Client-side routing
-- **Axios** - HTTP client for API calls
-- **Socket.io-client** - Real-time communication
-- **React Toastify** - User notifications
-- **Tailwind CSS** - Styling framework
+Builds the app for production to the `build` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
-### Backend
-- **Node.js** - Server runtime
-- **Express.js** - Web framework
-- **MongoDB** - NoSQL database
-- **Mongoose** - MongoDB ODM
-- **Socket.io** - Real-time server
-- **JWT** - Authentication
-- **bcryptjs** - Password hashing
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
 
-### Database
-- **MongoDB Atlas** - Cloud database
-- **Mongoose Schemas** - Data modeling
-- **Indexed queries** - Performance optimization
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-## 🚀 Getting Started
+### `npm run eject`
 
-### Prerequisites
-- Node.js (v14 or higher)
-- MongoDB database
-- Git
+**Note: this is a one-way operation. Once you `eject`, you can't go back!**
 
-### Installation
+If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/kitili/safari_connect.git
-   cd safari_connect
-   ```
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
 
-2. **Install backend dependencies**
-   ```bash
-   cd SafariConnect_Project/backend
-   npm install
-   ```
+You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
-3. **Install frontend dependencies**
-   ```bash
-   cd ../frontend
-   npm install
-   ```
+## Learn More
 
-4. **Set up environment variables**
-   Create `.env` file in the backend directory:
-   ```env
-   MONGODB_URI=your_mongodb_connection_string
-   JWT_SECRET=your_jwt_secret_key
-   FRONTEND_URL=http://localhost:3000
-   ```
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-5. **Seed the database**
-   ```bash
-   cd ../backend
-   node seedUsers.js
-   node seedMatches.js
-   ```
+To learn React, check out the [React documentation](https://reactjs.org/).
 
-6. **Start the application**
-   ```bash
-   # Start backend (in backend directory)
-   npm start
-   
-   # Start frontend (in frontend directory)
-   npm start
-   ```
+### Code Splitting
 
-## 📱 Usage
+This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
 
-### For Travelers
-1. **Register/Login** - Create your account
-2. **Complete Profile** - Add your travel preferences
-3. **Explore Destinations** - Browse available destinations
-4. **Find Matches** - Get matched with compatible travelers
-5. **Start Chatting** - Connect with your matches
-6. **Plan Trips** - Coordinate travel plans
+### Analyzing the Bundle Size
 
-### For Administrators
-1. **Login as Admin** - Use admin credentials
-2. **Access Dashboard** - View system analytics
-3. **Manage Users** - Monitor and control user accounts
-4. **Review Matches** - Oversee matching system
-5. **Export Data** - Generate reports
+This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
 
-## 🔧 API Endpoints
+### Making a Progressive Web App
 
-### Authentication
-- `POST /api/auth/signup` - User registration
-- `POST /api/auth/login` - User login
+This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
 
-### Users
-- `GET /api/users/profile` - Get user profile
-- `PUT /api/users/profile` - Update profile
-- `GET /api/users/:id` - Get specific user
+### Advanced Configuration
 
-### Matchmaking
-- `GET /api/match/suggestions` - Get match suggestions
-- `POST /api/match/create` - Create new match
-- `GET /api/match/user-matches` - Get user's matches
+This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
 
-### Chat
-- `GET /api/chat/` - Get user chats
-- `GET /api/chat/match/:matchId` - Get specific chat
-- `POST /api/chat/send` - Send message
+### Deployment
 
-### Admin
-- `GET /api/admin/dashboard` - Dashboard stats
-- `GET /api/admin/users` - All users
-- `GET /api/admin/matches` - All matches
-- `PUT /api/admin/users/:id/status` - Update user status
+This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
 
-## 🎯 Key Features Explained
+### `npm run build` fails to minify
 
-### Matchmaking Algorithm
-The platform uses a sophisticated algorithm that considers:
-- **Date Overlap** - Travel date compatibility
-- **Destination Match** - Same travel destinations
-- **Interest Compatibility** - Shared interests and hobbies
-- **Travel Style** - Adventure level and preferences
-- **Age Range** - Age compatibility
-- **Language** - Communication preferences
-
-### Real-time Features
-- **Live Chat** - Instant messaging between matched users
-- **Typing Indicators** - Real-time typing status
-- **Read Receipts** - Message read confirmation
-- **Location Sharing** - Share travel locations
-- **File Sharing** - Share photos and documents
-
-### Security Features
-- **JWT Authentication** - Secure token-based auth
-- **Password Hashing** - bcrypt password encryption
-- **Input Validation** - Server-side validation
-- **CORS Protection** - Cross-origin security
-- **Rate Limiting** - API protection
-
-## 📊 Database Schema
-
-### Users Collection
-```javascript
-{
-  name: String,
-  email: String,
-  password: String (hashed),
-  age: Number,
-  gender: String,
-  interests: [String],
-  travelStyle: String,
-  preferredDestinations: [String],
-  profileImage: String,
-  isAdmin: Boolean
-}
-```
-
-### Matches Collection
-```javascript
-{
-  user1: ObjectId,
-  user2: ObjectId,
-  destination: String,
-  date: Date,
-  compatibilityScore: Number,
-  status: String,
-  createdAt: Date
-}
-```
-
-### Chats Collection
-```javascript
-{
-  matchId: ObjectId,
-  participants: [ObjectId],
-  messages: [{
-    senderId: ObjectId,
-    message: String,
-    timestamp: Date,
-    read: Boolean
-  }],
-  lastMessage: Date
-}
-```
-
-## 🚀 Deployment
-
-### Backend Deployment (Heroku)
-1. Create Heroku app
-2. Set environment variables
-3. Connect MongoDB Atlas
-4. Deploy with Git
-
-### Frontend Deployment (Vercel/Netlify)
-1. Connect GitHub repository
-2. Set build settings
-3. Configure environment variables
-4. Deploy automatically
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
-
-## 📝 License
-
-This project is licensed under the MIT License.
-
-## 👥 Team
-
-- **Developer**: Samara
-- **Project**: SafariConnect
-- **Version**: 1.0.0
-
-## 📞 Support
-
-For support and questions:
-- Create an issue on GitHub
-- Contact the development team
-- Check the documentation
-
----
-
-**SafariConnect** - Connecting travelers, creating adventures! 🌍✈️
+This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)

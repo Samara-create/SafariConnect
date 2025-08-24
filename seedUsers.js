@@ -1,57 +1,78 @@
-// seedUsers.js
 const mongoose = require('mongoose');
-const dotenv = require('dotenv');
 const bcrypt = require('bcryptjs');
-const { faker } = require('@faker-js/faker');
+const faker = require('@faker-js/faker').faker;
+const User = require('./models/user'); // adjust this path if your model is located elsewhere
+require('dotenv').config();
 
-dotenv.config();
+// ✅ MongoDB URI
+const MONGO_URI = process.env.MONGO_URI_LOCAL || 'mongodb://localhost:27017/safariconnect';
 
-const connectDB = require('./Config/db'); // Adjust path if needed
-const User = require('./models/user'); // Adjust path if needed
-
+// 🎯 Predefined options
 const interestsList = [
-  'wildlife', 'culture', 'beaches', 'hiking', 'photography',
-  'food', 'music', 'safari', 'road trips', 'nature'
+  'hiking', 'beach', 'wildlife', 'culture', 'food', 'photography',
+  'camping', 'history', 'scuba diving', 'road trips', 'music festivals'
 ];
 
+const destinations = [
+  'Diani', 'Maasai Mara', 'Nairobi', 'Watamu', 'Naivasha',
+  'Kisumu', 'Tsavo', 'Lamu', 'Malindi', 'Mount Kenya'
+];
+
+const languagesList = ['English', 'Swahili', 'French', 'German', 'Italian', 'Spanish'];
+
 const createRandomUser = async () => {
-  const rawPassword = faker.internet.password({ length: 10 });
+  const rawPassword = faker.internet.password({ length: 8 });
   const hashedPassword = await bcrypt.hash(rawPassword, 10);
+  const destination = faker.helpers.arrayElement(destinations);
 
-  const email = faker.internet.email();
-  const name = faker.person.fullName();
+  const startDate = faker.date.future();
+  const endDate = new Date(startDate);
+  endDate.setDate(startDate.getDate() + faker.number.int({ min: 2, max: 7 }));
 
-  console.log(`📩 Email: ${email} | 🔑 Password: ${rawPassword}`);
+  const travelPlans = [
+    {
+      destination,
+      startDate,
+      endDate,
+      activities: faker.helpers.arrayElements(['hiking', 'beach', 'culture', 'wildlife'], 2)
+    }
+  ];
 
-  return {
-    name,
-    email,
+  return new User({
+    name: faker.person.fullName(),
+    email: faker.internet.email(),
     password: hashedPassword,
-    interests: faker.helpers.arrayElements(interestsList, faker.number.int({ min: 2, max: 4 })),
-    rating: faker.number.float({ min: 3, max: 5, precision: 0.1 })
-  };
+    destination,
+    travelPlans,
+    interests: faker.helpers.arrayElements(interestsList, faker.number.int({ min: 3, max: 5 })),
+    gender: faker.person.sexType(),
+    rating: faker.number.float({ min: 3.0, max: 5.0, precision: 0.1 }),
+    languages: faker.helpers.arrayElements(languagesList, 2),
+    profilePicture: faker.image.avatar(), // Optional: helps UI
+    createdAt: new Date()
+  });
 };
 
 const seedUsers = async () => {
-  await connectDB();
-
   try {
-    console.log('🔁 Seeding users...');
-    await User.deleteMany();
-    console.log('🧹 Existing users deleted');
+    await mongoose.connect(MONGO_URI);
+    console.log('🌱 Connected to MongoDB');
 
-    const users = [];
+    await User.deleteMany({});
+    console.log('🧹 Cleared existing users');
 
+    const userPromises = [];
     for (let i = 0; i < 50; i++) {
-      const user = await createRandomUser();
-      users.push(user);
+      userPromises.push(createRandomUser());
     }
 
+    const users = await Promise.all(userPromises);
     await User.insertMany(users);
-    console.log('✅ Successfully seeded 50 users!');
-    process.exit();
+    console.log(`✅ Seeded ${users.length} users successfully`);
+
+    process.exit(0);
   } catch (err) {
-    console.error('❌ Seeding error:', err);
+    console.error('❌ Error seeding users:', err);
     process.exit(1);
   }
 };

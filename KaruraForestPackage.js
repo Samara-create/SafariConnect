@@ -1,38 +1,8 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { toast } from 'react-toastify';
+import React from 'react';
+import ImageComponent from '../components/ImageComponent';
+import TripProfileForm from '../components/TripProfileForm';
 
 const KaruraForestPackage = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    idNumber: '',
-    date: '',
-    groupSize: '',
-    interests: '',
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const bookingData = {
-      ...formData,
-      destination: 'Karura Forest',
-      createdAt: new Date(),
-    };
-    try {
-      await axios.post('http://localhost:5000/api/trips', bookingData);
-      toast.success('🌳 Booking confirmed!');
-      setFormData({ name: '', idNumber: '', date: '', groupSize: '', interests: '' });
-    } catch (error) {
-      console.error(error);
-      toast.error('❌ Booking failed. Try again.');
-    }
-  };
-
   return (
     <div className="min-h-screen bg-gray-100 py-12 px-4 md:px-10 lg:px-20">
       <div className="text-center mb-10">
@@ -44,13 +14,13 @@ const KaruraForestPackage = () => {
       </div>
 
       <div className="grid md:grid-cols-3 gap-6 mb-12">
-        {[
-          'https://upload.wikimedia.org/wikipedia/commons/b/b4/Karura_Forest_Trail.jpg',
-          'https://nairobiluxuryliving.com/wp-content/uploads/2022/09/karura-forest.jpg',
-          'https://www.traveldiscoverkenya.com/wp-content/uploads/2022/04/Karura-Forest.jpg',
-          'https://upload.wikimedia.org/wikipedia/commons/d/df/Karura_forest_waterfall.jpg',
-          'https://www.kenyaforestservice.org/images/Karura2.jpg',
-          'https://www.tuko.co.ke/images/4b296f3f70a7c2cf.jpg'
+        {[ 
+          'https://www.friendsofkarura.org/wp-content/uploads/2024/09/Biking-at_Karura-Forest.jpg',
+          'https://samburunationalreservekenya.com/wp-content/uploads/2022/05/0fgjhs63re3iua8va.jpg', 
+          'https://i0.wp.com/www.travelwithapen.com/wp-content/uploads/2020/10/Karura-Forest-Picnic-Nairobi-Kenya-scaled.jpg?resize=1709%2C2560',
+          'https://healthykajuju.com/wp-content/uploads/2018/08/fullsizeoutput_165f.jpeg',
+          'https://waybird.imgix.net/experiences/kodak_images/000/016/333/original/Go_hiking_in_Karura_Forest.jpg?w=1420&h=946&crop=center%20center&fit=min&dpr=1&q=50&auto=format',
+          'https://www.amboseliparkkenya.com/wp-content/uploads/2024/02/Karura-Forest-waterfall.jpg'
         ].map((img, i) => (
           <img
             key={i}
@@ -72,73 +42,9 @@ const KaruraForestPackage = () => {
         </ul>
       </div>
 
-      <div id="booking" className="mt-16 bg-white p-8 rounded-2xl shadow-md max-w-2xl mx-auto">
-        <h2 className="text-2xl font-bold text-green-800 mb-6">📅 Book Your Visit</h2>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label className="block text-gray-700 mb-2 font-semibold">Full Name</label>
-            <input
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              type="text"
-              className="w-full border border-gray-300 rounded px-4 py-2"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-gray-700 mb-2 font-semibold">ID / Passport Number</label>
-            <input
-              name="idNumber"
-              value={formData.idNumber}
-              onChange={handleChange}
-              type="text"
-              className="w-full border border-gray-300 rounded px-4 py-2"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-gray-700 mb-2 font-semibold">Date of Visit</label>
-            <input
-              name="date"
-              value={formData.date}
-              onChange={handleChange}
-              type="date"
-              className="w-full border border-gray-300 rounded px-4 py-2"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-gray-700 mb-2 font-semibold">Number of People</label>
-            <input
-              name="groupSize"
-              value={formData.groupSize}
-              onChange={handleChange}
-              type="number"
-              min="1"
-              max="50"
-              className="w-full border border-gray-300 rounded px-4 py-2"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-gray-700 mb-2 font-semibold">Travel Interests</label>
-            <textarea
-              name="interests"
-              value={formData.interests}
-              onChange={handleChange}
-              rows="3"
-              placeholder="e.g. walking, birdwatching, photography"
-              className="w-full border border-gray-300 rounded px-4 py-2"
-            ></textarea>
-          </div>
-          <button
-            type="submit"
-            className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-full"
-          >
-            Submit Booking
-          </button>
-        </form>
+      {/* TripProfileForm instead of booking form */}
+      <div className="bg-white rounded-xl shadow-md p-6 mb-10 w-full sm:w-3/4 md:w-2/3 lg:w-1/2 mx-auto">
+        <TripProfileForm />
       </div>
 
       <div className="mt-20 mb-16">

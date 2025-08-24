@@ -3,6 +3,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import ImageComponent from '../components/ImageComponent';
 import '../styles/images.css';
+import TripProfileForm from '../components/TripProfileForm';
 
 const MaasaiMaraPackage = () => {
   const [formData, setFormData] = useState({
@@ -260,12 +261,12 @@ const MaasaiMaraPackage = () => {
 
       <div className="image-gallery">
         {[
-          'https://upload.wikimedia.org/wikipedia/commons/9/90/Masai_Mara_Kenya_Landscape.jpg',
-          'https://images.unsplash.com/photo-1555507036-6c1e092195f6',
-          'https://images.unsplash.com/photo-1583303702549-98a3dc8c90da',
-          'https://images.unsplash.com/photo-1615222946435-ea2458d6dd61',
-          'https://images.unsplash.com/photo-1554213520-2d65aa3b5b51',
-          'https://upload.wikimedia.org/wikipedia/commons/e/e4/Masai_Mara_Great_Migration.jpg'
+         'https://s3.amazonaws.com/cdn.micato.com/wp-content/uploads/2018/09/07230521/maasai-mara-8.jpg',
+    'https://upload.wikimedia.org/wikipedia/commons/1/17/Masai_Mara_at_Sunset.jpg',
+    'https://www.kenyasafari.com/images/masai-mara-saruni-mara-590x390.jpg',
+    'https://www.matriarchafrica.com/wp-content/uploads/2019/01/Ecotourism-Safari-Masai-Mara.jpg',
+    'https://www.greatadventuresafaris.com/wp-content/uploads/Masai-Mara-wildlife-reserve-1200x675.jpg',
+    'https://www.maasaimarakenyapark.com/wp-content/uploads/2019/12/Hotels-in-Masai-Mara-National-Reserve-749x450.jpg'
         ].map((img, i) => (
           <ImageComponent
             key={i}
@@ -275,251 +276,9 @@ const MaasaiMaraPackage = () => {
           />
         ))}
       </div>
-
-      <div className="bg-white shadow-md rounded-2xl p-8 mb-12">
-        <h2 className="text-2xl font-bold text-blue-800 mb-4">🦁 Highlights & Activities</h2>
-        <ul className="text-gray-700 text-lg list-disc list-inside space-y-2">
-          <li>Witness the Great Wildebeest Migration (Jul–Oct)</li>
-          <li>Game drives to spot lions, elephants, cheetahs, and rhinos</li>
-          <li>Hot air balloon safaris at sunrise</li>
-          <li>Visit Maasai villages for cultural immersion</li>
-          <li>Luxury tents and eco-friendly lodges available</li>
-        </ul>
-      </div>
-
-      <div className="mt-16 bg-white p-8 rounded-2xl shadow-md max-w-3xl mx-auto">
-        <h2 className="text-2xl font-bold text-blue-800 mb-6">📅 Book Your Safari Adventure</h2>
-        
-        {/* Passport Info */}
-        <div className="bg-blue-50 p-4 rounded-lg mb-6">
-          <h3 className="font-semibold text-blue-800 mb-2">📋 Passport/ID Requirements</h3>
-          <ul className="text-sm text-blue-700 space-y-1">
-            <li>• Kenyan Passport: A12345678 (letter + 8 digits)</li>
-            <li>• Kenyan ID: 12345678 (8 digits)</li>
-            <li>• International Passport: 123456789 (9 digits)</li>
-            <li>• We accept any valid government-issued ID</li>
-          </ul>
-        </div>
-        
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Personal Information */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-gray-700 mb-2 font-semibold">Full Name *</label>
-              <input 
-                name="name" 
-                value={formData.name} 
-                onChange={handleChange} 
-                type="text" 
-                className={`w-full border rounded px-4 py-2 ${
-                  errors.name ? 'border-red-500' : 'border-gray-300'
-                }`} 
-                placeholder="Enter your full name"
-              />
-              {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
-            </div>
-            
-            <div>
-              <label className="block text-gray-700 mb-2 font-semibold">ID / Passport Number *</label>
-              <input 
-                name="idNumber" 
-                value={formData.idNumber} 
-                onChange={handleChange} 
-                type="text" 
-                className={`w-full border rounded px-4 py-2 ${
-                  errors.idNumber ? 'border-red-500' : 'border-gray-300'
-                }`} 
-                placeholder="e.g., A12345678 or 12345678"
-              />
-              {errors.idNumber && <p className="text-red-500 text-sm mt-1">{errors.idNumber}</p>}
-              {formData.idNumber && !errors.idNumber && (
-                <p className="text-green-600 text-sm mt-1">
-                  ✅ Valid {validatePassport(formData.idNumber).type || 'ID'} format
-                </p>
-              )}
-            </div>
-          </div>
-
-          {/* Contact Information */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-gray-700 mb-2 font-semibold">Email</label>
-              <input 
-                name="email" 
-                value={formData.email} 
-                onChange={handleChange} 
-                type="email" 
-                className={`w-full border rounded px-4 py-2 ${
-                  errors.email ? 'border-red-500' : 'border-gray-300'
-                }`} 
-                placeholder="your.email@example.com"
-              />
-              {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
-            </div>
-            
-            <div>
-              <label className="block text-gray-700 mb-2 font-semibold">Phone Number</label>
-              <input 
-                name="phone" 
-                value={formData.phone} 
-                onChange={handleChange} 
-                type="tel" 
-                className="w-full border border-gray-300 rounded px-4 py-2" 
-                placeholder="+254 700 000 000"
-              />
-            </div>
-          </div>
-
-          {/* Trip Dates */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div>
-              <label className="block text-gray-700 mb-2 font-semibold">Trip Duration (Days) *</label>
-              <select 
-                value={tripDuration} 
-                onChange={handleDurationChange}
-                className="w-full border border-gray-300 rounded px-4 py-2"
-              >
-                <option value={1}>1 Day</option>
-                <option value={2}>2 Days</option>
-                <option value={3}>3 Days</option>
-                <option value={4}>4 Days</option>
-                <option value={5}>5 Days</option>
-                <option value={6}>6 Days</option>
-                <option value={7}>1 Week</option>
-                <option value={14}>2 Weeks</option>
-                <option value={21}>3 Weeks</option>
-                <option value={30}>1 Month</option>
-              </select>
-            </div>
-            
-            <div>
-              <label className="block text-gray-700 mb-2 font-semibold">Start Date *</label>
-              <input 
-                name="startDate" 
-                value={formData.startDate} 
-                onChange={handleStartDateChange} 
-                type="date" 
-                className={`w-full border rounded px-4 py-2 ${
-                  errors.startDate ? 'border-red-500' : 'border-gray-300'
-                }`} 
-              />
-              {errors.startDate && <p className="text-red-500 text-sm mt-1">{errors.startDate}</p>}
-            </div>
-            
-            <div>
-              <label className="block text-gray-700 mb-2 font-semibold">End Date *</label>
-              <input 
-                name="endDate" 
-                value={formData.endDate} 
-                onChange={handleChange} 
-                type="date" 
-                className={`w-full border rounded px-4 py-2 ${
-                  errors.endDate ? 'border-red-500' : 'border-gray-300'
-                }`} 
-              />
-              {errors.endDate && <p className="text-red-500 text-sm mt-1">{errors.endDate}</p>}
-            </div>
-          </div>
-
-          {/* Trip Details */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-gray-700 mb-2 font-semibold">Group Size *</label>
-              <input 
-                name="groupSize" 
-                value={formData.groupSize} 
-                onChange={handleChange} 
-                type="number" 
-                min="1" 
-                max="50" 
-                className={`w-full border rounded px-4 py-2 ${
-                  errors.groupSize ? 'border-red-500' : 'border-gray-300'
-                }`} 
-                placeholder="Number of people"
-              />
-              {errors.groupSize && <p className="text-red-500 text-sm mt-1">{errors.groupSize}</p>}
-            </div>
-            
-            <div>
-              <label className="block text-gray-700 mb-2 font-semibold">Travel Style</label>
-              <select 
-                name="travelStyle" 
-                value={formData.travelStyle} 
-                onChange={handleChange}
-                className="w-full border border-gray-300 rounded px-4 py-2"
-              >
-                <option value="mixed">Mixed</option>
-                <option value="budget">Budget</option>
-                <option value="luxury">Luxury</option>
-                <option value="adventure">Adventure</option>
-                <option value="relaxation">Relaxation</option>
-                <option value="cultural">Cultural</option>
-              </select>
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-gray-700 mb-2 font-semibold">Safari Interests</label>
-            <textarea 
-              name="interests" 
-              value={formData.interests} 
-              onChange={handleChange} 
-              rows="3" 
-              placeholder="e.g. Big Five, hot air balloon, photography, cultural visits, bird watching" 
-              className="w-full border border-gray-300 rounded px-4 py-2" 
-            />
-          </div>
-
-          {/* Preferences */}
-          <div className="bg-gray-50 p-4 rounded-lg space-y-4">
-            <h3 className="font-semibold text-gray-800">🎯 Trip Preferences</h3>
-            
-            <div className="flex items-center space-x-3">
-              <input 
-                type="checkbox" 
-                name="lookingForCompanion" 
-                checked={formData.lookingForCompanion} 
-                onChange={handleChange}
-                className="rounded"
-              />
-              <label className="text-gray-700">Looking for travel companions</label>
-            </div>
-            
-            <div className="flex items-center space-x-3">
-              <input 
-                type="checkbox" 
-                name="addToCalendar" 
-                checked={formData.addToCalendar} 
-                onChange={handleChange}
-                className="rounded"
-              />
-              <label className="text-gray-700">Add to Google Calendar</label>
-            </div>
-            
-            <div className="flex items-center space-x-3">
-              <input 
-                type="checkbox" 
-                name="autoMatchmaking" 
-                checked={formData.autoMatchmaking} 
-                onChange={handleChange}
-                className="rounded"
-              />
-              <label className="text-gray-700">Auto-enroll in matchmaking</label>
-            </div>
-          </div>
-          
-          <button 
-            type="submit" 
-            disabled={isSubmitting}
-            className={`w-full font-bold py-3 rounded-full transition-colors ${
-              isSubmitting 
-                ? 'bg-gray-400 cursor-not-allowed' 
-                : 'bg-blue-600 hover:bg-blue-700'
-            } text-white`}
-          >
-            {isSubmitting ? 'Booking Your Safari...' : 'Book Safari Adventure'}
-          </button>
-        </form>
+    {/* TripProfileForm instead of booking form */}
+      <div className="bg-white rounded-xl shadow-md p-6 mb-10 w-full sm:w-3/4 md:w-2/3 lg:w-1/2 mx-auto">
+        <TripProfileForm />
       </div>
 
       <div className="mt-20 mb-16">

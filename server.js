@@ -5,26 +5,26 @@ const dotenv = require('dotenv');
 const { createServer } = require('http');
 const { Server } = require('socket.io');
 
-// Load environment variables from .env
+// Load env variables
 dotenv.config();
 
-// TEMP DEBUG: Ensure env values are loaded
+// Temp check for env vars
 console.log('🔐 JWT_SECRET:', process.env.JWT_SECRET);
 console.log('🌐 FRONTEND_URL:', process.env.FRONTEND_URL);
 
 const app = express();
 const server = createServer(app);
 
-// ✅ CORS configuration to allow frontend communication
+// ✅ CORS config
 const corsOptions = {
-  origin: ['http://localhost:3000', 'http://localhost:3001'], // React frontend
+  origin: ['http://localhost:3000', 'http://localhost:3001'], // Adjust if needed
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 };
 app.use(cors(corsOptions));
 
-// ✅ Socket.io setup
+// ✅ Socket.IO config
 const io = new Server(server, {
   cors: {
     origin: ['http://localhost:3000', 'http://localhost:3001'],
@@ -36,11 +36,11 @@ const io = new Server(server, {
 // ✅ Middleware
 app.use(express.json());
 
-// ✅ Optional: Logging during development
 if (process.env.NODE_ENV !== 'production') {
   const morgan = require('morgan');
   app.use(morgan('dev'));
 }
+module.exports.io = io; // ✅ Export io instance here
 
 // ✅ Route imports
 const authRoutes = require('./routes/authRoutes');
@@ -49,14 +49,18 @@ const matchRoutes = require('./routes/matchRoutes');
 const chatRoutes = require('./routes/chatRoutes');
 const tripRoutes = require('./routes/tripRoutes');
 const adminRoutes = require('./routes/adminRoutes');
+const ratingRoutes = require('./routes/ratingRoutes');
 
-// ✅ API route mounting
-app.use('/api/auth', authRoutes);    // /api/auth/signup, /login
+
+
+// ✅ Mount routes
+app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/match', matchRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/trips', tripRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/ratings', ratingRoutes);
 
 // ✅ MongoDB connection
 mongoose.connect(process.env.MONGO_URI_LOCAL, {
@@ -64,36 +68,43 @@ mongoose.connect(process.env.MONGO_URI_LOCAL, {
   useUnifiedTopology: true,
 })
   .then(() => console.log('✅ MongoDB connected'))
-  .catch((err) => console.error('❌ MongoDB connection error:', err));
+  .catch((err) => console.error('❌ MongoDB error:', err));
 
-// ✅ 404 Route Handler
+// ✅ 404 Handler
 app.use((req, res) => {
   res.status(404).json({ message: 'Route not found' });
 });
 
-// ✅ Global Error Handler
+// ✅ Error Handler
 app.use((err, req, res, next) => {
   console.error('❌ Server error:', err.stack);
   res.status(500).json({ message: 'Internal server error' });
 });
 
-// ✅ Socket.io event handlers
+// ✅ Socket.IO Events
 io.on('connection', (socket) => {
   console.log('🔌 User connected:', socket.id);
 
-  // Join a chat room (for matched users)
-  socket.on('join-chat', (data) => {
-    const { matchId, userId } = data;
-    const roomName = `match-${matchId}`;
-    socket.join(roomName);
-    console.log(`👥 User ${userId} joined chat room: ${roomName}`);
+  // ✅ Join personal notification room (after login/signup)
+  socket.on('join-room', (userId) => {
+    if (userId) {
+      socket.join(userId.toString());
+      console.log(`📢 User ${userId} joined personal notifications room`);
+    }
   });
 
-  // Handle new messages
+  // ✅ Join chat room
+  socket.on('join-chat', ({ matchId, userId }) => {
+    const room = `match-${matchId}`;
+    socket.join(room);
+    socket.join(userId); // Also join personal notifications
+    console.log(`👥 User ${userId} joined rooms: ${room}, ${userId}`);
+  });
+
+  // ✅ Send message
   socket.on('send-message', (data) => {
     const { matchId, senderId, message, messageType = 'text' } = data;
-    const roomName = `match-${matchId}`;
-    
+    const room = `match-${matchId}`;
     const messageData = {
       id: Date.now().toString(),
       matchId,
@@ -104,36 +115,27 @@ io.on('connection', (socket) => {
       read: false
     };
 
-    // Broadcast to all users in the room
-    io.to(roomName).emit('new-message', messageData);
-    console.log(`💬 Message sent in room ${roomName}:`, messageData);
+    io.to(room).emit('new-message', messageData);
+    console.log(`💬 Message sent in ${room}:`, messageData);
   });
 
-  // Handle typing indicators
-  socket.on('typing-start', (data) => {
-    const { matchId, userId } = data;
-    const roomName = `match-${matchId}`;
-    socket.to(roomName).emit('user-typing', { userId, isTyping: true });
+  // ✅ Typing indicators
+  socket.on('typing-start', ({ matchId, userId }) => {
+    io.to(`match-${matchId}`).emit('user-typing', { userId, isTyping: true });
   });
 
-  socket.on('typing-stop', (data) => {
-    const { matchId, userId } = data;
-    const roomName = `match-${matchId}`;
-    socket.to(roomName).emit('user-typing', { userId, isTyping: false });
+  socket.on('typing-stop', ({ matchId, userId }) => {
+    io.to(`match-${matchId}`).emit('user-typing', { userId, isTyping: false });
   });
 
-  // Handle read receipts
-  socket.on('mark-read', (data) => {
-    const { matchId, messageId, userId } = data;
-    const roomName = `match-${matchId}`;
-    io.to(roomName).emit('message-read', { messageId, userId });
+  // ✅ Mark message as read
+  socket.on('mark-read', ({ matchId, messageId, userId }) => {
+    io.to(`match-${matchId}`).emit('message-read', { messageId, userId });
   });
 
-  // Handle location sharing
-  socket.on('share-location', (data) => {
-    const { matchId, senderId, location } = data;
-    const roomName = `match-${matchId}`;
-    
+  // ✅ Share location
+  socket.on('share-location', ({ matchId, senderId, location }) => {
+    const room = `match-${matchId}`;
     const locationData = {
       id: Date.now().toString(),
       matchId,
@@ -143,20 +145,22 @@ io.on('connection', (socket) => {
       timestamp: new Date()
     };
 
-    io.to(roomName).emit('new-message', locationData);
-    console.log(`📍 Location shared in room ${roomName}:`, locationData);
+    io.to(room).emit('new-message', locationData);
+    console.log(`📍 Location shared in ${room}:`, locationData);
   });
 
-  // Handle disconnection
   socket.on('disconnect', () => {
     console.log('🔌 User disconnected:', socket.id);
   });
 });
 
-// ✅ Start the server
+
+// ✅ Start server
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-  console.log('🔗 Signup route mounted at /api/auth/signup');
-  console.log('💬 Socket.io server ready for live chat!');
+  console.log(`🚀 Server listening on port ${PORT}`);
+  console.log('💬 Socket.IO is live!');
 });
+
+
+

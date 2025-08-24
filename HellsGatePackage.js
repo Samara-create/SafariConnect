@@ -1,38 +1,8 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { toast } from 'react-toastify';
+import React from 'react';
+import ImageComponent from '../components/ImageComponent';
+import TripProfileForm from '../components/TripProfileForm';
 
 const HellsGatePackage = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    idNumber: '',
-    date: '',
-    groupSize: '',
-    interests: '',
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const bookingData = {
-      ...formData,
-      destination: "Hell's Gate National Park",
-      createdAt: new Date(),
-    };
-    try {
-      await axios.post('http://localhost:5000/api/trips', bookingData);
-      toast.success('🎉 Booking confirmed!');
-      setFormData({ name: '', idNumber: '', date: '', groupSize: '', interests: '' });
-    } catch (error) {
-      console.error(error);
-      toast.error('❌ Booking failed. Try again.');
-    }
-  };
-
   return (
     <div className="min-h-screen bg-gray-100 py-12 px-4 md:px-10 lg:px-20">
       {/* Header */}
@@ -46,21 +16,26 @@ const HellsGatePackage = () => {
 
       {/* Gallery */}
       <div className="image-gallery">
-        {[
-          'https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Hell%27s_Gate_Gorge_Kenya.jpg/640px-Hell%27s_Gate_Gorge_Kenya.jpg',
-          'https://www.experienceeastafrica.com/images/hells-gate-1.jpg',
-          'https://images.unsplash.com/photo-1577819118210-7a5ffdb35efc',
-          'https://images.unsplash.com/photo-1593345123761-3aeb0dd6cf7a',
-          'https://upload.wikimedia.org/wikipedia/commons/3/3a/Hells_Gate_National_Park.jpg',
-          'https://cdn.britannica.com/73/185973-050-20E0AD5A/Hells-Gate-National-Park-Kenya.jpg'
+        {[ 
+          'https://www.hikingadventures.net/wp-content/uploads/2021/01/Hells-Gate-1-scaled.jpg',
+          'https://images-prod.trailsoffroad.com/scout_routes/2124/hero_file_name/1691523513107_hell%27s_gate-1440.jpg',
+          'https://easemysafari.com/wp-content/uploads/Cycling-or-Bike-Tour-in-Hells-Gate-National-Park.jpg',
+          'https://www.freetour.com/images/tours/40944/hells-gate-national-park-01.jpg',
+          'https://www.hellsgateairtram.com/wp-content/uploads/2023/05/2022-08-15.png',
+          'https://www.lakenakurukenya.com/wp-content/uploads/2020/02/Hell%E2%80%99s-gate-national-park-gorge.jpg',
         ].map((img, i) => (
           <ImageComponent
             key={i}
             src={img}
-            alt={`${fileName.replace("Package.js", "").replace(".js", "")} image ${i + 1}`}
+            alt={`Hells Gate image ${i + 1}`}
             className="rounded-xl shadow-lg w-full h-64 object-cover"
           />
         ))}
+      </div>
+
+      {/* Matchmaking Profile Form */}
+      <div className="bg-white rounded-xl shadow-md p-6 my-12 w-full sm:w-3/4 md:w-2/3 lg:w-1/2 mx-auto">
+        <TripProfileForm />
       </div>
 
       {/* Highlights */}
@@ -73,76 +48,6 @@ const HellsGatePackage = () => {
           <li>Hot springs, volcanic plugs, and geothermal spa</li>
           <li>Guided tours and camping options available</li>
         </ul>
-      </div>
-
-      {/* Booking Form */}
-      <div id="booking" className="mt-16 bg-white p-8 rounded-2xl shadow-md max-w-2xl mx-auto">
-        <h2 className="text-2xl font-bold text-blue-800 mb-6">📅 Book Your Visit</h2>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label className="block text-gray-700 mb-2 font-semibold">Full Name</label>
-            <input
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              type="text"
-              className="w-full border border-gray-300 rounded px-4 py-2"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-gray-700 mb-2 font-semibold">ID / Passport Number</label>
-            <input
-              name="idNumber"
-              value={formData.idNumber}
-              onChange={handleChange}
-              type="text"
-              className="w-full border border-gray-300 rounded px-4 py-2"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-gray-700 mb-2 font-semibold">Date of Visit</label>
-            <input
-              name="date"
-              value={formData.date}
-              onChange={handleChange}
-              type="date"
-              className="w-full border border-gray-300 rounded px-4 py-2"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-gray-700 mb-2 font-semibold">Number of People</label>
-            <input
-              name="groupSize"
-              value={formData.groupSize}
-              onChange={handleChange}
-              type="number"
-              min="1"
-              max="50"
-              className="w-full border border-gray-300 rounded px-4 py-2"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-gray-700 mb-2 font-semibold">Travel Interests</label>
-            <textarea
-              name="interests"
-              value={formData.interests}
-              onChange={handleChange}
-              rows="3"
-              placeholder="e.g. hiking, wildlife photography, hot springs"
-              className="w-full border border-gray-300 rounded px-4 py-2"
-            ></textarea>
-          </div>
-          <button
-            type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-full"
-          >
-            Submit Booking
-          </button>
-        </form>
       </div>
 
       {/* Map */}

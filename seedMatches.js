@@ -1,48 +1,56 @@
-// seedMatches.js
 const mongoose = require('mongoose');
-const dotenv = require('dotenv');
+const faker = require('@faker-js/faker').faker;
+const User = require('./models/user');   // Adjust path if needed
+const Match = require('./models/match'); // Adjust path if needed
+require('dotenv').config();
 
-dotenv.config();
-
-const connectDB = require('./Config/db'); // adjust path if needed
-const User = require('./models/user');
-const Match = require('./models/Match');
-
-const getRandomPair = (users) => {
-  const user1 = users[Math.floor(Math.random() * users.length)];
-  let user2;
-  do {
-    user2 = users[Math.floor(Math.random() * users.length)];
-  } while (user1._id.equals(user2._id)); // ensure they're not the same
-  return [user1, user2];
-};
+const MONGO_URI = process.env.MONGO_URI_LOCAL || 'mongodb://localhost:27017/safariConnect';
 
 const seedMatches = async () => {
-  await connectDB();
-
   try {
+    await mongoose.connect(MONGO_URI);
+    console.log('✅ MongoDB connected');
+
     console.log('🔁 Seeding matches...');
-    await Match.deleteMany();
+    await Match.deleteMany({});
     console.log('🧹 Existing matches cleared');
 
     const users = await User.find();
-    if (users.length < 2) throw new Error('Need at least 2 users to create matches.');
+    const userCount = users.length;
+
+    if (userCount < 2) {
+      throw new Error('Not enough users to create matches');
+    }
 
     const matches = [];
 
     for (let i = 0; i < 30; i++) {
-      const [user1, user2] = getRandomPair(users);
-      matches.push({
-        user1: user1._id,
-        user2: user2._id,
-        matchScore: Math.floor(Math.random() * 100), // 0–99
-        matchedAt: new Date()
-      });
+      let user1, user2;
+
+      do {
+        user1 = users[Math.floor(Math.random() * userCount)];
+        user2 = users[Math.floor(Math.random() * userCount)];
+      } while (user1._id.equals(user2._id));
+
+      const destination = user1.destination || user2.destination || faker.location.city();
+      const date = faker.date.future();
+      const compatibilityScore = faker.number.int({ min: 60, max: 100 });
+
+      matches.push(
+        new Match({
+          user1: user1._id,
+          user2: user2._id,
+          destination,
+          date,
+          compatibilityScore,
+        })
+      );
     }
 
     await Match.insertMany(matches);
-    console.log('✅ 30 matches seeded successfully!');
-    process.exit();
+    console.log(`✅ Successfully seeded ${matches.length} matches`);
+
+    process.exit(0);
   } catch (err) {
     console.error('❌ Seeding error:', err);
     process.exit(1);

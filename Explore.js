@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/images.css';
 
+
 const sampleDestinations = [
   {
     name: 'National Museum Of Kenya',

@@ -1,50 +1,72 @@
-// utils/api.js
 import axios from 'axios';
 
-// Set API base URL (customizable via .env)
+// ✅ Create a reusable axios instance
 const API = axios.create({
-  baseURL: process.env.REACT_APP_API_BASE || 'http://localhost:5000/api',
+  baseURL: 'http://localhost:5000/api',
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// Automatically attach token if available
-API.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
+// ✅ Attach JWT token to all requests except /auth
+API.interceptors.request.use(
+  (config) => {
+    const excludedPaths = ['/auth/login', '/auth/signup'];
+    const isExcluded = excludedPaths.some((path) => config.url.includes(path));
 
-// ======================
-// ✅ AUTH ROUTES
-// ======================
-export const signup = (data) => API.post('/auth/signup', data);   // POST /api/auth/signup
-export const login = (data) => API.post('/auth/login', data);     // POST /api/auth/login
-export const oauthLogin = () => API.get('/auth/oauth');           // GET /api/auth/oauth
+    if (!isExcluded) {
+      const token = localStorage.getItem('token');
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+    }
 
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
-// ======================
-// ✅ USER ROUTES
-// ======================
-export const getAllUsers = () => API.get('/users');
-export const getUserById = (id) => API.get(`/users/${id}`);
-export const updateUser = (id, data) => API.put(`/users/${id}`, data);
-export const deleteUser = (id) => API.delete(`/users/${id}`);
+// ========== AUTH ==========
+export const login = (data) => API.post('/auth/login', data);
+export const signup = (data) => API.post('/auth/signup', data);
 
-// ======================
-// ✅ MATCH ROUTES
-// ======================
-export const getMatches = () => API.get('/match');
+// ========== MATCHING ==========
 export const getMatchSuggestions = () => API.get('/match/suggestions');
 export const createMatch = (data) => API.post('/match', data);
+export const getMatches = () => API.get('/match');
+export const autoMatchUser = () => API.post('/match/auto');
 export const updateMatch = (id, data) => API.put(`/match/${id}`, data);
 export const deleteMatch = (id) => API.delete(`/match/${id}`);
 
-// ======================
-// ✅ CHAT ROUTES
-// ======================
+// ========== ADMIN ==========
+export const getDashboardStats = () => API.get('/admin/dashboard');
+export const getUsers = (page = 1, limit = 10) =>
+  API.get(`/admin/users?page=${page}&limit=${limit}`);
+export const toggleUserStatus = (userId, isActive) =>
+  API.put(`/admin/users/${userId}/status`, { isActive });
+export const deleteUser = (userId) => API.delete(`/admin/users/${userId}`);
+
+export const getTrips = (page = 1, limit = 10) =>
+  API.get(`/admin/trips?page=${page}&limit=${limit}`);
+export const deleteTrip = (tripId) => API.delete(`/admin/trips/${tripId}`);
+
+export const exportData = (type) => API.get(`/admin/export/${type}`);
+
+// ========== TRIPS ==========
+export const createTrip = (data) => API.post('/trips', data);
+export const getAllTrips = () => API.get('/trips');
+export const getUpcomingTrips = () => API.get('/trips/upcoming');
+export const getTripById = (id) => API.get(`/trips/${id}`);
+export const updateTripStatus = (id, status) =>
+  API.put(`/trips/${id}/status`, { status });
+export const deleteTripById = (id) => API.delete(`/trips/${id}`);
+
+// ========== CHAT ==========
+export const getUserChats = () => API.get('/chat');
+export const getOrCreateChat = (matchId) => API.get(`/chat/match/${matchId}`);
 export const sendMessage = (data) => API.post('/chat/send', data);
-export const getMessages = (chatUserId) => API.get(`/chat/${chatUserId}`);
+export const markMessagesRead = (matchId, messageIds) =>
+  API.put(`/chat/${matchId}/read`, { messageIds });
+export const getChatStats = () => API.get('/chat/stats');
+
+export default API;

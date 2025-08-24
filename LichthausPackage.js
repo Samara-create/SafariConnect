@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import ImageComponent from '../components/ImageComponent'; // Adjust path if different
+import TripProfileForm from '../components/TripProfileForm';
 
 const LichthausPackage = () => {
   const [formData, setFormData] = useState({
@@ -44,12 +46,9 @@ const LichthausPackage = () => {
 
       <div className="grid md:grid-cols-3 gap-6 mb-12">
         {[
-          'https://cdn.vanguardngr.com/wp-content/uploads/2022/04/IMG-20220424-WA0049.jpg',
-          'https://images.unsplash.com/photo-1598387992706-0a93e7a9df3c',
-          'https://images.unsplash.com/photo-1550686041-db1e62e5b250',
-          'https://images.unsplash.com/photo-1598387900989-517cfa2c0083',
-          'https://images.unsplash.com/photo-1600585153471-8c0f3b099d4a',
-          'https://images.unsplash.com/photo-1582542029787-0d6e9a4e4896'
+          'https://cdn.prod.website-files.com/667d4286644e58960632a8d7/66bdcc58139d5d2dbcb75023_Temple%20Point%20Resort%20Watamu-38.jpg',
+        'https://eatout.co.ke/wp-content/uploads/2021/04/lichthaus1.jpeg',
+          'https://media-cdn.tripadvisor.com/media/photo-s/1a/ba/a8/3a/super-cool-and-stylish.jpg'
         ].map((img, i) => (
           <img
             key={i}
@@ -71,33 +70,9 @@ const LichthausPackage = () => {
         </ul>
       </div>
 
-      <div className="mt-16 bg-white p-8 rounded-2xl shadow-md max-w-2xl mx-auto">
-        <h2 className="text-2xl font-bold text-purple-800 mb-6">📅 Book Your Experience</h2>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label className="block text-gray-700 mb-2 font-semibold">Full Name</label>
-            <input name="name" value={formData.name} onChange={handleChange} type="text" className="w-full border border-gray-300 rounded px-4 py-2" required />
-          </div>
-          <div>
-            <label className="block text-gray-700 mb-2 font-semibold">ID / Passport Number</label>
-            <input name="idNumber" value={formData.idNumber} onChange={handleChange} type="text" className="w-full border border-gray-300 rounded px-4 py-2" required />
-          </div>
-          <div>
-            <label className="block text-gray-700 mb-2 font-semibold">Date of Visit</label>
-            <input name="date" value={formData.date} onChange={handleChange} type="date" className="w-full border border-gray-300 rounded px-4 py-2" required />
-          </div>
-          <div>
-            <label className="block text-gray-700 mb-2 font-semibold">Group Size</label>
-            <input name="groupSize" value={formData.groupSize} onChange={handleChange} type="number" min="1" max="50" className="w-full border border-gray-300 rounded px-4 py-2" required />
-          </div>
-          <div>
-            <label className="block text-gray-700 mb-2 font-semibold">Interests</label>
-            <textarea name="interests" value={formData.interests} onChange={handleChange} rows="3" placeholder="e.g. art, music, workshops" className="w-full border border-gray-300 rounded px-4 py-2" />
-          </div>
-          <button type="submit" className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 rounded-full">
-            Submit Booking
-          </button>
-        </form>
+         {/* TripProfileForm instead of booking form */}
+      <div className="bg-white rounded-xl shadow-md p-6 mb-10 w-full sm:w-3/4 md:w-2/3 lg:w-1/2 mx-auto">
+        <TripProfileForm />
       </div>
 
       <div className="mt-20 mb-16">

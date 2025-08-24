@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import ImageComponent from '../components/ImageComponent'; // Adjust path if different
+import TripProfileForm from '../components/TripProfileForm';
 
 const DungaBeachPackage = () => {
   const [formData, setFormData] = useState({
@@ -44,21 +46,19 @@ const DungaBeachPackage = () => {
       </div>
 
       <div className="image-gallery">
-        {[
-          'https://kisumucounty.go.ke/wp-content/uploads/2021/05/Dunga-Beach-Kisumu.jpg',
-          'https://media-cdn.tripadvisor.com/media/photo-s/0f/c8/e3/7a/dunga-beach.jpg',
-          'https://images.unsplash.com/photo-1577985051082-3249f9e7a313',
-          'https://kenyanbackpacker.com/wp-content/uploads/2022/03/Dunga-Boardwalk-Kisumu.jpg',
-          'https://pbs.twimg.com/media/FW8OSt0WQAIKZ4b.jpg',
-          'https://www.kisumucity.co.ke/images/photos/3.jpg'
-        ].map((img, i) => (
-          <ImageComponent
-            key={i}
-            src={img}
-            alt={`${fileName.replace("Package.js", "").replace(".js", "")} image ${i + 1}`}
-            className="rounded-xl shadow-lg w-full h-64 object-cover"
-          />
-        ))}
+       {[
+      'https://pbs.twimg.com/media/FSIw2lpXEAErbA0?format=jpg&name=large',
+    'https://macleki.org/wp-content/uploads/2018/08/Dunga-Beach_Thomas-Stellmach_02242012.jpg'
+  
+].map((img, i) => (
+  <ImageComponent
+    key={i}
+    src={img}
+    alt={`Dunga Beach image ${i + 1}`}
+    className="rounded-xl shadow-lg w-full h-64 object-cover"
+  />
+))}
+
       </div>
 
       <div className="bg-white shadow-md rounded-2xl p-8 mb-12">
@@ -72,33 +72,9 @@ const DungaBeachPackage = () => {
         </ul>
       </div>
 
-      <div className="mt-16 bg-white p-8 rounded-2xl shadow-md max-w-2xl mx-auto">
-        <h2 className="text-2xl font-bold text-blue-800 mb-6">📅 Book Your Visit</h2>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label className="block text-gray-700 mb-2 font-semibold">Full Name</label>
-            <input name="name" value={formData.name} onChange={handleChange} type="text" className="w-full border border-gray-300 rounded px-4 py-2" required />
-          </div>
-          <div>
-            <label className="block text-gray-700 mb-2 font-semibold">ID / Passport Number</label>
-            <input name="idNumber" value={formData.idNumber} onChange={handleChange} type="text" className="w-full border border-gray-300 rounded px-4 py-2" required />
-          </div>
-          <div>
-            <label className="block text-gray-700 mb-2 font-semibold">Date of Visit</label>
-            <input name="date" value={formData.date} onChange={handleChange} type="date" className="w-full border border-gray-300 rounded px-4 py-2" required />
-          </div>
-          <div>
-            <label className="block text-gray-700 mb-2 font-semibold">Group Size</label>
-            <input name="groupSize" value={formData.groupSize} onChange={handleChange} type="number" min="1" max="50" className="w-full border border-gray-300 rounded px-4 py-2" required />
-          </div>
-          <div>
-            <label className="block text-gray-700 mb-2 font-semibold">Interests</label>
-            <textarea name="interests" value={formData.interests} onChange={handleChange} rows="3" placeholder="e.g. canoe rides, nature, fishing" className="w-full border border-gray-300 rounded px-4 py-2" />
-          </div>
-          <button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-full">
-            Submit Booking
-          </button>
-        </form>
+        {/* TripProfileForm instead of booking form */}
+      <div className="bg-white rounded-xl shadow-md p-6 mb-10 w-full sm:w-3/4 md:w-2/3 lg:w-1/2 mx-auto">
+        <TripProfileForm />
       </div>
 
       <div className="mt-20 mb-16">

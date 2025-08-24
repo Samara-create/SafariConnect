@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import ImageComponent from '../components/ImageComponent'; // Adjust path if different
+import TripProfileForm from '../components/TripProfileForm';
 
 const WatamuSnakeFarmPackage = () => {
   const [formData, setFormData] = useState({
@@ -70,34 +72,9 @@ const WatamuSnakeFarmPackage = () => {
           <li>Family-friendly and educational for all ages</li>
         </ul>
       </div>
-
-      <div className="mt-16 bg-white p-8 rounded-2xl shadow-md max-w-2xl mx-auto">
-        <h2 className="text-2xl font-bold text-green-800 mb-6">📅 Book Your Visit</h2>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label className="block text-gray-700 mb-2 font-semibold">Full Name</label>
-            <input name="name" value={formData.name} onChange={handleChange} type="text" className="w-full border border-gray-300 rounded px-4 py-2" required />
-          </div>
-          <div>
-            <label className="block text-gray-700 mb-2 font-semibold">ID / Passport Number</label>
-            <input name="idNumber" value={formData.idNumber} onChange={handleChange} type="text" className="w-full border border-gray-300 rounded px-4 py-2" required />
-          </div>
-          <div>
-            <label className="block text-gray-700 mb-2 font-semibold">Date of Visit</label>
-            <input name="date" value={formData.date} onChange={handleChange} type="date" className="w-full border border-gray-300 rounded px-4 py-2" required />
-          </div>
-          <div>
-            <label className="block text-gray-700 mb-2 font-semibold">Group Size</label>
-            <input name="groupSize" value={formData.groupSize} onChange={handleChange} type="number" min="1" max="50" className="w-full border border-gray-300 rounded px-4 py-2" required />
-          </div>
-          <div>
-            <label className="block text-gray-700 mb-2 font-semibold">Interests</label>
-            <textarea name="interests" value={formData.interests} onChange={handleChange} rows="3" placeholder="e.g. reptiles, venom research, conservation" className="w-full border border-gray-300 rounded px-4 py-2" />
-          </div>
-          <button type="submit" className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-full">
-            Submit Booking
-          </button>
-        </form>
+     {/* TripProfileForm instead of booking form */}
+      <div className="bg-white rounded-xl shadow-md p-6 mb-10 w-full sm:w-3/4 md:w-2/3 lg:w-1/2 mx-auto">
+        <TripProfileForm />
       </div>
 
       <div className="mt-20 mb-16">
